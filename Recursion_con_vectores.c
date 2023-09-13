@@ -45,29 +45,30 @@
             sumapares_impares(dim,vector, pos +1, sum);
         }
 
-        void promedio_notas_que_superan(int pos, int cantidad_notas, int notas_alumnos [], 
-        float *promedio, int*notas_que_superan)
-        {
-            if (pos == cantidad_notas)
-            {
-                *promedio = *promedio / cantidad_notas;
-                
-            }
-            else
-            {
-                *promedio += notas_alumnos[pos];
-                promedio_notas_que_superan(pos + 1, cantidad_notas, notas_alumnos, promedio, notas_que_superan);
-            }
-            if (pos == 0)
-            {
-                return;
-            }
-            else if (notas_alumnos[pos - 1] > promedio)
-            {
-                *notas_que_superan += 1;
-                promedio_notas_que_superan (pos - 1, cantidad_notas, notas_alumnos, promedio, notas_que_superan);
-            }  
-        }
+        void promedio_notas_que_superan(int pos, int cantidad_notas, int notas_alumnos[], float *promedio, int *notas_que_superan)
+    {
+    if (pos == cantidad_notas)
+    {
+        *promedio = *promedio / cantidad_notas;
+        return;
+    }
+    else
+    {
+        *promedio += notas_alumnos[pos];
+    }
+
+    promedio_notas_que_superan(pos + 1, cantidad_notas, notas_alumnos, promedio, notas_que_superan);//
+    if (pos == 0)
+    {
+         return;
+    }
+    if (notas_alumnos[pos] > *promedio)
+    {
+        (*notas_que_superan)+= 1;
+    }
+
+    
+}
 
 int main()
 {
