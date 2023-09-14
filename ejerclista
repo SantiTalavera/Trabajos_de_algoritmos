@@ -1,0 +1,118 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/*
+Una librería ubicada en el centro de la ciudad de La Plata tiene información de los libros que en ella se venden. 
+De los libros se conoce: su nombre, código, autor, editorial, precio y stock. Almacena dicha información en una lista. 
+
+Se desea: 
+A) Obtener un listado en donde figure código y editorial de aquellos libros con stock nulo. 
+B) Simular la entrada de nuevos libros a la librería o la reposición de los ya existentes
+*/
+
+
+// Declaro mi registro para almacenar los datos
+struct libro {
+    int codigo;
+    char nombre[50];
+    char autor[50];
+    char editorial[50];
+    float precio;
+    int stock;
+};
+
+// Crear nodo
+struct nodo {
+    struct libro libro;
+    struct nodo* siguiente;
+};
+
+// Funcion para crear el nodo
+struct nodo* crearNodo(struct libro libro) {
+    struct nodo* nuevo = (struct nodo*)malloc(sizeof(struct nodo));
+    nuevo->libro = libro;
+    nuevo->siguiente = NULL;
+    return nuevo;
+}
+
+// Procedimiento para agregar el nodo
+void agregarnodo(struct nodo** lista, struct nodo* nuevo) {
+    if (*lista == NULL) {
+        *lista = nuevo;
+    } else {
+        struct nodo* aux = *lista;
+        while (aux->siguiente != NULL) {
+            aux = aux->siguiente;
+        }
+        aux->siguiente = nuevo;
+    }
+}
+
+// Procedimiento para el inciso a - mostrar los libros con stock nulo
+void librosStockNulo(struct nodo* lista) {
+    printf("Libros con stock nulo:\n");
+    while (lista != NULL) {
+        if (lista->libro.stock == 0) {
+            printf("Codigo: %d, Editorial: %s\n", lista->libro.codigo, lista->libro.editorial);
+        }
+        lista = lista->siguiente;
+    }
+}
+
+int main() {
+    // Variables Locales
+    struct nodo* listalibros = NULL;
+    int opc;
+
+    // Menu
+    system("cls");
+    do {
+        printf("1) Ingresar un nuevo libro.\n");
+        printf("2) Imprimir los libros de stock nulo.\n");
+        printf("3) Salir.\n");
+        printf("Seleccione la opcion: ");
+        scanf("%d", &opc);
+
+        switch (opc) {
+            case 1: {
+                struct libro libro;
+                printf("Ingrese el codigo del libro: \n");
+                scanf("%d", &libro.codigo);
+                printf("Ingrese el nombre: \n");
+                scanf("%s", libro.nombre);
+                printf("Ingrese el autor:\n");
+                scanf("%s", libro.autor);
+                printf("Ingrese la editorial:\n");
+                scanf("%s", libro.editorial);
+                printf("Ingrese el precio:\n");
+                scanf("%f", &libro.precio);
+                printf("Ingrese el stock:\n");
+                scanf("%d", &libro.stock);
+                agregarnodo(&listalibros, crearNodo(libro));
+                printf("Libro ingresado.\n");
+                break;
+            }
+            case 2: {
+                librosStockNulo(listalibros);
+                break;
+            }
+            case 3: {
+                printf("Goodbye, ty!\n");
+                break;
+            }
+            default:
+                printf("Opcion invalida, intentelo de nuevo\n");
+                break;
+        }
+    } while (opc != 3);
+
+    // Liberar
+    while (listalibros != NULL) {
+        struct nodo* aux = listalibros;
+        listalibros = listalibros->siguiente;
+        free(aux);
+    }
+
+    return 0;
+}
